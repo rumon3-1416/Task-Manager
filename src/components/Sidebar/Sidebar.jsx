@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import { useAuthContext } from '../../Hooks/useAuthContext';
-import './sidebar.css';
 import SideBtn from '../Shared/SideBtn';
 import AddProject from '../../Pages/Home/AddProject/AddProject';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import './sidebar.css';
 
 const Sidebar = ({ navRef, collapse, setCollapse }) => {
   const divRef = useRef(null);
@@ -12,6 +13,17 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
 
   const { darkTheme, signOutUser } = useAuthContext();
   const axiosSecure = useAxiosSecure();
+
+  // Load Projects
+
+  const { data: projects = [], refetch } = useQuery({
+    queryKey: ['projects'],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get('/projects');
+
+      return data;
+    },
+  });
 
   // Handle sidebar Collapse
   useEffect(() => {
@@ -53,7 +65,7 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
     };
 
     const { data } = await axiosSecure.post('/project', project);
-    data.acknowledged && setShowModal(false);
+    data.acknowledged && (setShowModal(false), refetch());
   };
 
   return (
@@ -70,9 +82,11 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
             <p className="font-semibold mb-2">Projects</p>
 
             <ul className="">
-              <li>
-                <SideBtn>Project 1</SideBtn>
-              </li>
+              {projects.map(project => (
+                <li key={project._id}>
+                  <SideBtn>{project.title}</SideBtn>
+                </li>
+              ))}
 
               <li>
                 <SideBtn

@@ -2,10 +2,13 @@ import React, { useRef, useState } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
 import Sidebar from '../components/Sidebar/Sidebar';
+import { useAuthContext } from '../Hooks/useAuthContext';
 
 const MainLayout = () => {
   const navRef = useRef(null);
   const [collapse, setCollapse] = useState(false);
+
+  const { user } = useAuthContext();
 
   return (
     <div className="bg-tealBg">

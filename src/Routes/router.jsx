@@ -8,16 +8,16 @@ import PrivateNavigator from './PrivateNavigator';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainLayout />,
+    element: (
+      <PrivateNavigator>
+        <MainLayout />
+      </PrivateNavigator>
+    ),
     errorElement: <Error />,
     children: [
       {
         path: '/',
-        element: (
-          <PrivateNavigator>
-            <Home />
-          </PrivateNavigator>
-        ),
+        element: <Home />,
       },
     ],
   },
