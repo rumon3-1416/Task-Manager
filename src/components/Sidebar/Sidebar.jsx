@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '../../Hooks/useAuthContext';
 import './sidebar.css';
 import SideBtn from '../Shared/SideBtn';
+import AddProject from '../../Pages/Home/AddProject/AddProject';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const Sidebar = ({ navRef, collapse, setCollapse }) => {
   const divRef = useRef(null);
+  const [showModal, setShowModal] = useState(false);
 
-  const { pathname } = useLocation();
-  const { darkTheme, user, signOutUser } = useAuthContext();
+  const { darkTheme, signOutUser } = useAuthContext();
+  const axiosSecure = useAxiosSecure();
 
-  const navigate = useNavigate();
-
+  // Handle sidebar Collapse
   useEffect(() => {
     // Handle Resize Screen
     const handleResize = e => {
@@ -41,6 +42,20 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
     };
   }, []);
 
+  // Add Project
+  const handleAddProject = async e => {
+    e.preventDefault();
+
+    const form = e.target;
+    const project = {
+      title: form.title.value,
+      description: form.description.value,
+    };
+
+    const { data } = await axiosSecure.post('/project', project);
+    data.acknowledged && setShowModal(false);
+  };
+
   return (
     <div className="min-h-full max-h-full sticky top-0 left-0 z-10">
       <div className="h-full relative">
@@ -52,21 +67,19 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
           } ${darkTheme ? 'bg-[#212527f0]' : 'bg-[#f6fffe]'}`}
         >
           <div className="p-3">
-            <p className="font-semibold mb-2">Tasks</p>
+            <p className="font-semibold mb-2">Projects</p>
 
             <ul className="">
               <li>
-                <SideBtn>Task 1</SideBtn>
+                <SideBtn>Project 1</SideBtn>
               </li>
+
               <li>
-                <SideBtn>Task 2</SideBtn>
-              </li>
-              <li>
-                <SideBtn>Task 3</SideBtn>
-              </li>
-              <li>
-                <SideBtn className={'border-[1.5px] border-teal mt-1'}>
-                  Add Task +
+                <SideBtn
+                  onClick={() => setShowModal(true)}
+                  className={'border-[1.5px] border-teal mt-1 text-center'}
+                >
+                  + Add Project
                 </SideBtn>
               </li>
             </ul>
@@ -81,6 +94,12 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
           </div>
         </div>
       </div>
+
+      <AddProject
+        showModal={showModal}
+        setShowModal={setShowModal}
+        handleAddProject={handleAddProject}
+      />
     </div>
   );
 };

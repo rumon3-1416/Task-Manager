@@ -3,7 +3,7 @@ import { HiBars3BottomLeft } from 'react-icons/hi2';
 import { useAuthContext } from '../../Hooks/useAuthContext';
 
 const Navbar = ({ navRef, collapse, setCollapse }) => {
-  const { darkTheme } = useAuthContext();
+  const { darkTheme, user } = useAuthContext();
 
   // useEffect(() => {
   //   document.body.style.backgroundColor = darkTheme ? '#303030' : '#f7f7f7';
@@ -33,6 +33,15 @@ const Navbar = ({ navRef, collapse, setCollapse }) => {
             </button>
 
             <h2 className="poppins-font text-white font-semibold">Taskly</h2>
+          </div>
+
+          <div className="me-2 rounded-full border border-white">
+            <img
+              className="w-7 h-7 aspect-square object-cover p-0.5 rounded-full"
+              src={user?.photoURL}
+              referrerPolicy="no-referrer"
+              alt=""
+            />
           </div>
         </nav>
       </div>

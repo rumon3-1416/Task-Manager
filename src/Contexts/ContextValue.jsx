@@ -52,15 +52,15 @@ export const ContextValue = () => {
           .then(res => localStorage.setItem('access_token', res.data.token))
           .then(() => {
             // Save User
-            // axiosPublic
-            //   .post('/users', {
-            //     email: currentUser.email,
-            //     displayName: currentUser.displayName,
-            //     photoURL: currentUser.photoURL,
-            //   })
-            //   .then(() => {
-            setLoading(false);
-            //   });
+            axiosPublic
+              .post('/users', {
+                email: currentUser.email,
+                displayName: currentUser.displayName,
+                photoURL: currentUser.photoURL,
+              })
+              .then(() => {
+                setLoading(false);
+              });
           });
       } else {
         // Clear Token
