@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
+import { Draggable } from '@hello-pangea/dnd';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { useLocation } from 'react-router-dom';
 import useProject from '../../Hooks/useProject';
 
-const Task = ({ task }) => {
+const Task = ({ task, index }) => {
   const taskRef = useRef(null);
   const [showUpdateTask, setShowUpdateTask] = useState(false);
 
@@ -52,77 +53,86 @@ const Task = ({ task }) => {
   };
 
   return (
-    <div className="bg-white px-2 py-1 mt-1 border-[1.5px] border-gray-300 rounded-md flex justify-between items-center relative">
-      <p>{task.title}</p>
-
-      <button
-        onClick={() => setShowUpdateTask(true)}
-        className="hover:bg-gray-200 px-1.5 py-1 rounded-sm"
-      >
-        <BsThreeDots />
-      </button>
-
-      {/* Update or Delete Task */}
-      <div
-        ref={taskRef}
-        className={`bg-gray-50 p-3 border-[1.5px] border-gray-300 rounded-md shadow-lg absolute top-8 right-0 z-10 ${
-          showUpdateTask ? '' : 'hidden'
-        }`}
-      >
-        <form onSubmit={handleUpdateTask} className="text-sm flex flex-col">
-          {/* Title */}
-          <label className="font-medium" htmlFor="title">
-            Title
-          </label>
-          <input
-            className="px-2 py-0.5 mb-3 text-sm border-[1.5px] border-gray-300 rounded-md outline-none"
-            type="text"
-            name="title"
-            id="title"
-            placeholder="Task Title"
-            defaultValue={task.title}
-            maxLength={50}
-            required
-          />
-          {/* Category */}
-          <p className="font-medium mb-3">
-            Category - <span className="font-normal">{task.category}</span>
-          </p>
-          {/* Time */}
-          <p className="font-medium">Timestamp</p>
-          <p className="mb-3">{`${new Date().toLocaleDateString()} - ${new Date().toLocaleDateString()}`}</p>
-          {/* Description */}
-          <label className="font-medium" htmlFor="description">
-            Description
-          </label>
-          <textarea
-            className="px-2 py-0.5 mb-3 text-sm border-[1.5px] border-gray-300 rounded-md outline-none resize-none"
-            type="text"
-            name="description"
-            id="description"
-            placeholder="Task Description"
-            defaultValue={task.description}
-            rows={3}
-            maxLength={200}
-            required
-          />
+    <Draggable draggableId={String(task.time)} index={index}>
+      {provided => (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          className="bg-white px-2 py-1 mt-1 border-[1.5px] border-gray-300 rounded-md flex justify-between items-center relative"
+        >
+          <p>{task.title}</p>
 
           <button
-            type="submit"
-            className="bg-teal3 hover:bg-teal2 text-sm font-medium px-2 py-1 rounded-md border-[1.5px] border-gray-300"
+            onClick={() => setShowUpdateTask(true)}
+            className="hover:bg-gray-200 px-1.5 py-1 rounded-sm"
           >
-            Update Task
+            <BsThreeDots />
           </button>
-          <button
-            onClick={handleDelete}
-            type="button"
-            className="bg-[#ffd9d5] hover:bg-[#ffc2bc] text-sm font-medium px-2 py-1 mt-2 rounded-md border-[1.5px] border-gray-300"
+
+          {/* Update or Delete Task */}
+          <div
+            ref={taskRef}
+            className={`bg-gray-50 p-3 border-[1.5px] border-gray-300 rounded-md shadow-lg absolute top-8 right-0 z-10 ${
+              showUpdateTask ? '' : 'hidden'
+            }`}
           >
-            Delete Task
-          </button>
-        </form>
-      </div>
-    </div>
+            <form onSubmit={handleUpdateTask} className="text-sm flex flex-col">
+              {/* Title */}
+              <label className="font-medium" htmlFor="title">
+                Title
+              </label>
+              <input
+                className="px-2 py-0.5 mb-3 text-sm border-[1.5px] border-gray-300 rounded-md outline-none"
+                type="text"
+                name="title"
+                id="title"
+                placeholder="Task Title"
+                defaultValue={task.title}
+                maxLength={50}
+                required
+              />
+              {/* Category */}
+              <p className="font-medium mb-3">
+                Category - <span className="font-normal">{task.category}</span>
+              </p>
+              {/* Time */}
+              <p className="font-medium">Timestamp</p>
+              <p className="mb-3">{`${new Date().toLocaleDateString()} - ${new Date().toLocaleDateString()}`}</p>
+              {/* Description */}
+              <label className="font-medium" htmlFor="description">
+                Description
+              </label>
+              <textarea
+                className="px-2 py-0.5 mb-3 text-sm border-[1.5px] border-gray-300 rounded-md outline-none resize-none"
+                type="text"
+                name="description"
+                id="description"
+                placeholder="Task Description"
+                defaultValue={task.description}
+                rows={3}
+                maxLength={200}
+                required
+              />
+
+              <button
+                type="submit"
+                className="bg-teal3 hover:bg-teal2 text-sm font-medium px-2 py-1 rounded-md border-[1.5px] border-gray-300"
+              >
+                Update Task
+              </button>
+              <button
+                onClick={handleDelete}
+                type="button"
+                className="bg-[#ffd9d5] hover:bg-[#ffc2bc] text-sm font-medium px-2 py-1 mt-2 rounded-md border-[1.5px] border-gray-300"
+              >
+                Delete Task
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </Draggable>
   );
 };
 

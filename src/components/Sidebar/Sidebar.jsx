@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { replace, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '../../Hooks/useAuthContext';
 import SideBtn from '../Shared/SideBtn';
@@ -101,20 +100,22 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
 
                 return (
                   <li key={_id}>
-                    <SideBtn
-                      className={
-                        pathname.slice(1) === _id
-                          ? 'bg-[#5dadaaba] text-white'
-                          : ''
-                      }
-                      onClick={() => navigate(`/${_id}`)}
-                    >
-                      {title}
-                    </SideBtn>
+                    <NavLink to={`/${_id}`}>
+                      <SideBtn
+                        className={`${
+                          pathname.slice(1) === _id
+                            ? 'bg-[#5dadaaba] text-white'
+                            : ''
+                        } mb-0.5`}
+                      >
+                        {title}
+                      </SideBtn>
+                    </NavLink>
                   </li>
                 );
               })}
 
+              {/* Add Project */}
               <li>
                 <SideBtn
                   onClick={() => setShowModal(true)}
