@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import useProject from '../../Hooks/useProject';
 
 const Task = ({ task }) => {
+  console.log(task);
   const taskRef = useRef(null);
   const [showUpdateTask, setShowUpdateTask] = useState(false);
 
@@ -40,6 +41,15 @@ const Task = ({ task }) => {
 
     const { data } = await axiosSecure.patch(`/task${pathname}`, updatedDoc);
     data.acknowledged && (form.reset(), setShowUpdateTask(false), refetch());
+  };
+
+  // Delete Task
+  const handleDelete = async () => {
+    const { data } = await axiosSecure.delete(`/task${pathname}`, {
+      data: { category: task.category, time: task.time, order: task.order },
+    });
+
+    data.acknowledged && (setShowUpdateTask(false), refetch());
   };
 
   return (
@@ -105,6 +115,7 @@ const Task = ({ task }) => {
             Update Task
           </button>
           <button
+            onClick={handleDelete}
             type="button"
             className="bg-[#ffd9d5] hover:bg-[#ffc2bc] text-sm font-medium px-2 py-1 mt-2 rounded-md border-[1.5px] border-gray-300"
           >

@@ -35,7 +35,7 @@ const AddTask = ({ className, project, task_category, setShowTaskForm }) => {
           ?.tasks.length + 1;
 
     const doc = { ...task, time: Date.now(), order };
-    const { data } = await axiosSecure.put(`/task/${pathname.slice(1)}`, doc);
+    const { data } = await axiosSecure.put(`/task${pathname}`, doc);
     data.acknowledged && (form.reset(), setShowTaskForm(false), refetch());
   };
 
