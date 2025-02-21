@@ -13,7 +13,7 @@ const MainLayout = () => {
 
       <div className="h-10"></div>
 
-      <div className="h-[calc(100vh-2.5rem)] min-h-[calc(100vh-2.5rem)] flex">
+      <div className="h-[calc(100vh-2.5rem)] min-h-[calc(100vh-2.5rem)] overflow-hidden flex">
         <Sidebar
           navRef={navRef}
           collapse={collapse}

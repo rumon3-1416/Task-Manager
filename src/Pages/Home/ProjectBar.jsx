@@ -11,7 +11,7 @@ const ProjectBar = ({ project }) => {
 
       <div className="flex items-center gap-2">
         <button
-          onClick={() => setShowTaskForm(!showTaskForm)}
+          onClick={() => setShowTaskForm(true)}
           className="hover:bg-gray-200 font-medium text-left px-2 py-0.5 h-9 rounded-md border-[1.5px] border-gray-300"
         >
           <span className="text-lg">+</span> Add Task

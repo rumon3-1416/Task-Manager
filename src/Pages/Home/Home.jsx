@@ -11,7 +11,7 @@ const Home = () => {
   const { project } = useProject(pathname);
 
   return (
-    <div className="w-full h-full p-4">
+    <div className="w-full h-full p-4 overflow-y-auto">
       <ProjectBar project={project} />
 
       {/* Task Cards */}

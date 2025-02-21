@@ -3,7 +3,7 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { useLocation } from 'react-router-dom';
 import useProject from '../../Hooks/useProject';
 
-const AddTask = ({ className, project, setShowTaskForm }) => {
+const AddTask = ({ className, project, task_category, setShowTaskForm }) => {
   const addTaskRef = useRef();
 
   const axiosSecure = useAxiosSecure();
@@ -29,12 +29,13 @@ const AddTask = ({ className, project, setShowTaskForm }) => {
     const formData = new FormData(form);
     const task = Object.fromEntries(formData.entries());
 
-    const order =
-      project?.task_categories?.find(cat => (cat.category = task.category))
-        ?.tasks.length + 1;
+    const order = task_category
+      ? task_category.tasks.length + 1
+      : project?.task_categories?.find(cat => cat.category === task.category)
+          ?.tasks.length + 1;
 
     const doc = { ...task, time: Date.now(), order };
-    const { data } = await axiosSecure.put(`/task/${project._id}`, doc);
+    const { data } = await axiosSecure.put(`/task/${pathname.slice(1)}`, doc);
 
     data.acknowledged && (form.reset(), setShowTaskForm(false), refetch());
   };
@@ -66,6 +67,8 @@ const AddTask = ({ className, project, setShowTaskForm }) => {
           className="px-2 py-0.5 mb-3 text-sm border-[1.5px] border-gray-300 rounded-md outline-none"
           name="category"
           id="category"
+          defaultValue={task_category?.category || 'Todo'}
+          disabled={task_category?.category}
           required
         >
           <option value="Todo">Todo</option>
