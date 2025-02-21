@@ -7,19 +7,25 @@ import AddProject from '../../Pages/Home/AddProject/AddProject';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import './sidebar.css';
 
-const Sidebar = ({ navRef, collapse, setCollapse }) => {
+const Sidebar = ({
+  navRef,
+  collapse,
+  currentId,
+  setCollapse,
+  setCurrentId,
+}) => {
   const divRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
 
   const { darkTheme, signOutUser } = useAuthContext();
   const axiosSecure = useAxiosSecure();
 
-  // Load Projects
-
+  // Load Projects Titles
   const { data: projects = [], refetch } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
-      const { data } = await axiosSecure.get('/projects');
+      const { data } = await axiosSecure.get('/projects-titles');
+      setCurrentId(data[0]?._id);
 
       return data;
     },
@@ -81,19 +87,31 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
           <div className="p-3">
             <p className="font-semibold mb-2">Projects</p>
 
+            {/* Sidebar menu */}
             <ul className="">
-              {projects.map(project => (
-                <li key={project._id}>
-                  <SideBtn>{project.title}</SideBtn>
-                </li>
-              ))}
+              {projects.map(project => {
+                const { _id, title } = project;
+
+                return (
+                  <li key={_id}>
+                    <SideBtn
+                      className={
+                        currentId === _id ? 'bg-[#5dadaaba] text-white' : ''
+                      }
+                      onClick={() => setCurrentId(_id)}
+                    >
+                      {title}
+                    </SideBtn>
+                  </li>
+                );
+              })}
 
               <li>
                 <SideBtn
                   onClick={() => setShowModal(true)}
                   className={'border-[1.5px] border-teal mt-1 text-center'}
                 >
-                  + Add Project
+                  <span className="text-lg">+</span> Add Project
                 </SideBtn>
               </li>
             </ul>
@@ -102,9 +120,12 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
             <div className="my-3 border border-gray-300"></div>
 
             {/* Sign Out */}
-            <SideBtn onClick={signOutUser} className="hover:bg-coral2">
+            <button
+              onClick={signOutUser}
+              className="text-dark hover:bg-coral2 hover:text-white text-sm font-medium text-nowrap text-left w-full overflow-hidden px-4 py-1 rounded-full ${className}"
+            >
               Sign Out
-            </SideBtn>
+            </button>
           </div>
         </div>
       </div>

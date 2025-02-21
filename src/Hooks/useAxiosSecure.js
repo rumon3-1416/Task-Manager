@@ -32,7 +32,7 @@ const useAxiosSecure = () => {
       },
       error => {
         console.log('ResIntError --> ', error.message);
-        signOutUser();
+        (error.status === 401 || error.status === 403) && signOutUser();
         return Promise.reject(error);
       }
     );

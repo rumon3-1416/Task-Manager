@@ -1,30 +1,29 @@
 import React, { useRef, useState } from 'react';
-import { Outlet, ScrollRestoration } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
 import Sidebar from '../components/Sidebar/Sidebar';
-import { useAuthContext } from '../Hooks/useAuthContext';
+import Home from '../Pages/Home/Home';
 
 const MainLayout = () => {
   const navRef = useRef(null);
   const [collapse, setCollapse] = useState(false);
-
-  const { user } = useAuthContext();
+  const [currentId, setCurrentId] = useState(null);
 
   return (
     <div className="bg-tealBg">
-      <ScrollRestoration />
       <Navbar navRef={navRef} collapse={collapse} setCollapse={setCollapse} />
 
-      <div className="h-9"></div>
+      <div className="h-10"></div>
 
-      <div className="h-[calc(100vh-2.25rem)] min-h-[calc(100vh-2.25rem)] flex">
+      <div className="h-[calc(100vh-2.5rem)] min-h-[calc(100vh-2.5rem)] flex">
         <Sidebar
           navRef={navRef}
           collapse={collapse}
+          currentId={currentId}
           setCollapse={setCollapse}
+          setCurrentId={setCurrentId}
         />
 
-        <Outlet />
+        <Home currentId={currentId} />
       </div>
     </div>
   );

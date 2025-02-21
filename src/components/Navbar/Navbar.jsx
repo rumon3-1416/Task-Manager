@@ -16,13 +16,15 @@ const Navbar = ({ navRef, collapse, setCollapse }) => {
   // }, [darkTheme]);
 
   return (
-    <div className="w-full h-9 fixed top-0 inset-x-0 z-20">
+    <div className="w-full h-10 fixed top-0 inset-x-0 z-20">
       <div
         className={`w-full px-2 backdrop-blur-md shadow-lg ${
           darkTheme ? 'bg-[#212527f0]' : 'bg-teal'
         }`}
       >
-        <nav className={`h-9 flex justify-between items-center gap-2 relative`}>
+        <nav
+          className={`h-10 flex justify-between items-center gap-2 relative`}
+        >
           <div className="flex items-center gap-3">
             <button
               ref={navRef}

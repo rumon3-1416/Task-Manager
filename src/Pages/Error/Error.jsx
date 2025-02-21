@@ -17,7 +17,7 @@ const Error = () => {
 
       <button
         onClick={() => navigate('/')}
-        className="text-white bg-skyBlue hover:bg-successGreen font-semibold px-5 py-2 mt-4 rounded-full transition-all duration-200"
+        className="text-white bg-teal hover:bg-coral2 font-semibold px-5 py-2 mt-4 rounded-full transition-all duration-200"
       >
         Go Home
       </button>

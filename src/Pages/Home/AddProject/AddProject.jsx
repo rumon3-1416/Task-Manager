@@ -15,7 +15,7 @@ const AddProject = ({ showModal, setShowModal, handleAddProject }) => {
     <div className="bg-[#00000053] w-full min-h-screen backdrop-blur-sm fixed inset-x-0 top-0 z-20 flex justify-center items-center">
       <form
         onSubmit={handleAddProject}
-        className="bg-white w-[90%] max-w-xl px-4 py-6 mt-9 rounded-xl flex flex-col gap-4 relative"
+        className="animate__animated animate__zoomIn bg-white w-[90%] max-w-xl px-4 py-6 mt-9 rounded-xl flex flex-col gap-4 relative"
       >
         {/* Close Modal */}
         <button
