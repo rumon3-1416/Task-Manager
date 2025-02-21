@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { replace, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '../../Hooks/useAuthContext';
 import SideBtn from '../Shared/SideBtn';
@@ -7,26 +8,26 @@ import AddProject from '../../Pages/Home/AddProject/AddProject';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import './sidebar.css';
 
-const Sidebar = ({
-  navRef,
-  collapse,
-  currentId,
-  setCollapse,
-  setCurrentId,
-}) => {
+const Sidebar = ({ navRef, collapse, setCollapse }) => {
   const divRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
 
   const { darkTheme, signOutUser } = useAuthContext();
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   // Load Projects Titles
-  const { data: projects = [], refetch } = useQuery({
+  const {
+    data: projects = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
       const { data } = await axiosSecure.get('/projects-titles');
-      setCurrentId(data[0]?._id);
-
+      !isLoading &&
+        (data[0]?._id ? navigate(`/${data[0]._id}`) : navigate('/'));
       return data;
     },
   });
@@ -96,9 +97,11 @@ const Sidebar = ({
                   <li key={_id}>
                     <SideBtn
                       className={
-                        currentId === _id ? 'bg-[#5dadaaba] text-white' : ''
+                        pathname.slice(1) === _id
+                          ? 'bg-[#5dadaaba] text-white'
+                          : ''
                       }
-                      onClick={() => setCurrentId(_id)}
+                      onClick={() => navigate(`/${_id}`)}
                     >
                       {title}
                     </SideBtn>

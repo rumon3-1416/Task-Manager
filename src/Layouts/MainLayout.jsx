@@ -1,12 +1,11 @@
 import React, { useRef, useState } from 'react';
 import Navbar from '../components/Navbar/Navbar';
 import Sidebar from '../components/Sidebar/Sidebar';
-import Home from '../Pages/Home/Home';
+import { Outlet } from 'react-router-dom';
 
 const MainLayout = () => {
   const navRef = useRef(null);
   const [collapse, setCollapse] = useState(false);
-  const [currentId, setCurrentId] = useState(null);
 
   return (
     <div className="bg-tealBg">
@@ -18,12 +17,10 @@ const MainLayout = () => {
         <Sidebar
           navRef={navRef}
           collapse={collapse}
-          currentId={currentId}
           setCollapse={setCollapse}
-          setCurrentId={setCurrentId}
         />
 
-        <Home currentId={currentId} />
+        <Outlet />
       </div>
     </div>
   );
