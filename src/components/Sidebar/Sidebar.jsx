@@ -7,6 +7,7 @@ import SideBtn from '../Shared/SideBtn';
 import AddProject from '../../Pages/Home/AddProject/AddProject';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import './sidebar.css';
+import useProject from '../../Hooks/useProject';
 
 const Sidebar = ({ navRef, collapse, setCollapse }) => {
   const divRef = useRef(null);
@@ -17,22 +18,25 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // Load Projects Titles
-  const {
-    data: projects = [],
-    refetch,
-    isLoading,
-  } = useQuery({
-    queryKey: ['projects'],
-    queryFn: async () => {
-      const { data } = await axiosSecure.get('/projects-titles');
-      !isLoading &&
-        (data[0]?._id && pathname === '/'
-          ? navigate(`/${data[0]._id}`)
-          : !data[0]?._id && navigate('/'));
-      return data;
-    },
-  });
+  const { projectsTitles, refetchTitles, loadingTitles, isRefetching } =
+    useProject();
+
+  // Navigate to Correct Existing Project
+  useEffect(() => {
+    if (!loadingTitles) {
+      if (projectsTitles[0]?._id && pathname === '/') {
+        navigate(`/${projectsTitles[0]._id}`);
+      } else if (!projectsTitles[0]?._id) {
+        navigate('/');
+      } else if (projectsTitles[0]?._id && !(pathname === '/')) {
+        let isExists = false;
+        projectsTitles.find(
+          pt => pt._id === pathname.slice(1) && (isExists = true)
+        );
+        !isExists && navigate(`/${projectsTitles[0]._id}`);
+      }
+    }
+  }, [loadingTitles, isRefetching]);
 
   // Handle sidebar Collapse
   useEffect(() => {
@@ -74,7 +78,7 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
     };
 
     const { data } = await axiosSecure.post('/project', project);
-    data.acknowledged && (setShowModal(false), refetch());
+    data.acknowledged && (setShowModal(false), refetchTitles());
   };
 
   return (
@@ -92,7 +96,7 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
 
             {/* Sidebar menu */}
             <ul className="">
-              {projects.map(project => {
+              {projectsTitles.map(project => {
                 const { _id, title } = project;
 
                 return (

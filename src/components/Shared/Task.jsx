@@ -5,7 +5,6 @@ import { useLocation } from 'react-router-dom';
 import useProject from '../../Hooks/useProject';
 
 const Task = ({ task }) => {
-  console.log(task);
   const taskRef = useRef(null);
   const [showUpdateTask, setShowUpdateTask] = useState(false);
 
@@ -63,7 +62,7 @@ const Task = ({ task }) => {
         <BsThreeDots />
       </button>
 
-      {/* Update Task */}
+      {/* Update or Delete Task */}
       <div
         ref={taskRef}
         className={`bg-gray-50 p-3 border-[1.5px] border-gray-300 rounded-md shadow-lg absolute top-8 right-0 z-10 ${

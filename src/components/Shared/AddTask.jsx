@@ -22,6 +22,7 @@ const AddTask = ({ className, project, task_category, setShowTaskForm }) => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  // Add Task
   const handleAddTask = async e => {
     e.preventDefault();
 

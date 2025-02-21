@@ -23,9 +23,6 @@ const TaskCard = ({ category }) => {
           >
             +
           </button>
-          <button className="hover:bg-gray-200 text-lg size-6 flex justify-center items-center rounded-md">
-            <BsThreeDots />
-          </button>
         </div>
       </div>
 

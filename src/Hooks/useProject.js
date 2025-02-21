@@ -4,6 +4,19 @@ import useAxiosSecure from './useAxiosSecure';
 const useProject = pathname => {
   const axiosSecure = useAxiosSecure();
 
+  const {
+    data: projectsTitles = [],
+    refetch: refetchTitles,
+    isLoading: loadingTitles,
+    isRefetching,
+  } = useQuery({
+    queryKey: ['projects_titles'],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get('/projects-titles');
+      return data;
+    },
+  });
+
   const { data: project = {}, refetch } = useQuery({
     queryKey: ['project', pathname],
     queryFn: async () => {
@@ -16,7 +29,14 @@ const useProject = pathname => {
     },
   });
 
-  return { project, refetch };
+  return {
+    project,
+    refetch,
+    projectsTitles,
+    refetchTitles,
+    loadingTitles,
+    isRefetching,
+  };
 };
 
 export default useProject;
