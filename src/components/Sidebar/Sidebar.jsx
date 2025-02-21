@@ -27,7 +27,9 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
     queryFn: async () => {
       const { data } = await axiosSecure.get('/projects-titles');
       !isLoading &&
-        (data[0]?._id ? navigate(`/${data[0]._id}`) : navigate('/'));
+        (data[0]?._id && pathname === '/'
+          ? navigate(`/${data[0]._id}`)
+          : !data[0]?._id && navigate('/'));
       return data;
     },
   });

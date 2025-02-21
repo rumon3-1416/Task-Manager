@@ -36,7 +36,6 @@ const AddTask = ({ className, project, task_category, setShowTaskForm }) => {
 
     const doc = { ...task, time: Date.now(), order };
     const { data } = await axiosSecure.put(`/task/${pathname.slice(1)}`, doc);
-
     data.acknowledged && (form.reset(), setShowTaskForm(false), refetch());
   };
 
@@ -44,7 +43,7 @@ const AddTask = ({ className, project, task_category, setShowTaskForm }) => {
     <div
       ref={addTaskRef}
       id="addTask"
-      className={`bg-white p-3 border-[1.5px] border-gray-300 rounded-md absolute z-10 ${className}`}
+      className={`bg-white p-3 border-[1.5px] border-gray-300 rounded-md shadow-lg absolute z-10 ${className}`}
     >
       <form onSubmit={handleAddTask} className="text-sm flex flex-col">
         {/* Title */}
@@ -57,6 +56,7 @@ const AddTask = ({ className, project, task_category, setShowTaskForm }) => {
           name="title"
           id="title"
           placeholder="Task Title"
+          maxLength={50}
           required
         />
         {/* Category */}
@@ -64,11 +64,12 @@ const AddTask = ({ className, project, task_category, setShowTaskForm }) => {
           Category
         </label>
         <select
-          className="px-2 py-0.5 mb-3 text-sm border-[1.5px] border-gray-300 rounded-md outline-none"
+          className={`px-2 py-0.5 mb-3 text-sm border-[1.5px] border-gray-300 rounded-md outline-none ${
+            task_category?.category && 'pointer-events-none'
+          }`}
           name="category"
           id="category"
           defaultValue={task_category?.category || 'Todo'}
-          disabled={task_category?.category}
           required
         >
           <option value="Todo">Todo</option>
@@ -100,12 +101,13 @@ const AddTask = ({ className, project, task_category, setShowTaskForm }) => {
           id="description"
           placeholder="Task Description"
           rows={3}
+          maxLength={200}
           required
         />
 
         <button
           type="submit"
-          className="bg-tealBg hover:bg-teal3 text-sm font-medium px-2 py-1 rounded-md border-[1.5px] border-gray-300"
+          className="bg-teal3 hover:bg-teal2 text-sm font-medium px-2 py-1 rounded-md border-[1.5px] border-gray-300"
         >
           Add Task
         </button>

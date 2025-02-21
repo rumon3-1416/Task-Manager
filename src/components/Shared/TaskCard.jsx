@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import AddTask from './AddTask';
+import Task from './Task';
 
 const TaskCard = ({ category }) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
-
-  console.log(category);
 
   const handleAddTask = () => {};
 
   return (
     <div
       id={category.title}
-      className="bg-coralBg p-2 border-[1.5px] border-gray-300 rounded-md relative"
+      className="bg-coralBg h-fit p-2 border-[1.5px] border-gray-300 rounded-md relative"
     >
       {/* Head */}
       <div className="flex justify-between items-center gap-2">
@@ -30,8 +29,10 @@ const TaskCard = ({ category }) => {
         </div>
       </div>
 
-      {/* Body */}
-      <div className="bg-white p-2 mt-1 border-[1.5px] border-gray-300 rounded-md"></div>
+      {/* body Tasks */}
+      {category.tasks.map((task, i) => (
+        <Task task={task} key={i} />
+      ))}
 
       {/* Foot */}
       <div className="mt-1">
