@@ -24,7 +24,7 @@ const SignIn = () => {
   }, []);
 
   return (
-    <div className="bg-tealBg">
+    <div className="bg-[#bababa]">
       <section
         className={`min-h-[100vh] max-h-[100vh] flex justify-center items-center`}
       >

@@ -45,10 +45,10 @@ const TaskCard = ({ category }) => {
           </div>
 
           {/* Foot */}
-          <div className="mt-1">
+          <div className="mt-3">
             <button
               onClick={() => setShowTaskForm(true)}
-              className="hover:bg-gray-200 w-full text-left px-2 py-0.5 rounded-md"
+              className="hover:bg-gray-200 w-full text-left px-2 py-0.5 border-[1.5px] border-gray-300 rounded-md"
             >
               <span className="text-lg">+</span> Add Task
             </button>

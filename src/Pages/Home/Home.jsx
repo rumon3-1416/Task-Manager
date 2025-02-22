@@ -18,7 +18,6 @@ const Home = () => {
   useEffect(() => {
     if (isFetched && !isRefetching && canSetProject) {
       setLocalProject(project);
-      console.log('hi');
     }
   }, [project, isFetched, isRefetching, canSetProject]);
 

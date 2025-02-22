@@ -61,11 +61,16 @@ const Task = ({ task, index }) => {
           {...provided.dragHandleProps}
           className="bg-white px-2 py-1 mt-1 border-[1.5px] border-gray-300 rounded-md flex justify-between items-center gap-2 relative"
         >
-          <p className="text-nowrap overflow-hidden">{task.title}</p>
+          <div className="w-full grid grid-cols-2 items-center gap-2">
+            <p className="text-nowrap overflow-hidden">{task.title}</p>
+            <p className="text-gray-600 text-sm text-nowrap overflow-hidden">
+              {task.description}
+            </p>
+          </div>
 
           <button
             onClick={() => setShowUpdateTask(true)}
-            className="hover:bg-gray-200 px-1.5 py-1 rounded-sm"
+            className="hover:bg-gray-200 border border-gray-300 px-1.5 py-1 rounded-md"
           >
             <BsThreeDots />
           </button>

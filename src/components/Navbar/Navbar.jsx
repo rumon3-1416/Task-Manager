@@ -20,7 +20,9 @@ const Navbar = ({ navRef, collapse, setCollapse }) => {
               <HiBars3BottomLeft />
             </button>
 
-            <h2 className="poppins-font text-white font-semibold">Taskly</h2>
+            <h2 className="poppins-font text-white font-semibold md:ms-2">
+              Taskly
+            </h2>
           </div>
 
           <div className="flex items-center gap-2">
