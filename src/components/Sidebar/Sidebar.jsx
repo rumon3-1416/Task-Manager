@@ -121,7 +121,7 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
               <li>
                 <SideBtn
                   onClick={() => setShowModal(true)}
-                  className={'border-[1.5px] border-teal mt-1 text-center'}
+                  className={'border border-teal mt-1 text-center'}
                 >
                   <span className="text-lg">+</span> Add Project
                 </SideBtn>

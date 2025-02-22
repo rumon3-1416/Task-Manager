@@ -9,17 +9,18 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const Home = () => {
   const [localProject, setLocalProject] = useState({});
+  const [canSetProject, setCanSetProject] = useState(true);
 
   const { pathname } = useLocation();
   const { project, refetch, isFetched, isRefetching } = useProject(pathname);
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    if (isFetched && !isRefetching) {
+    if (isFetched && !isRefetching && canSetProject) {
       setLocalProject(project);
       console.log('hi');
     }
-  }, [project, isFetched, isRefetching]);
+  }, [project, isFetched, isRefetching, canSetProject]);
 
   const onDragEnd = async result => {
     const { source, destination } = result;
@@ -75,14 +76,12 @@ const Home = () => {
           }),
         ],
       };
+      setCanSetProject(false);
       setLocalProject(updatedProject);
 
       // Update in backend
-      const { data } = await axiosSecure.patch(
-        `/task_same_reorder${pathname}`,
-        reorderedTasks
-      );
-      data?.acknowledged && refetch();
+      await axiosSecure.patch(`/task_same_reorder${pathname}`, reorderedTasks);
+      refetch().then(() => setCanSetProject(true));
     } else {
       // Source Category Tasks
       const sourceTasks = project.task_categories.find(
@@ -130,18 +129,15 @@ const Home = () => {
           }),
         ],
       };
+      setCanSetProject(false);
       setLocalProject(updatedProject);
 
       // Update in Backend
-      const { data } = await axiosSecure.patch(`/task_cat_reorder${pathname}`, {
+      await axiosSecure.patch(`/task_cat_reorder${pathname}`, {
         source: { category: sourceCat, tasks: orderDecSourceTasks },
         destination: { category: destCat, tasks: orderIncDestTasks },
       });
-      data?.result1?.acknowledged &&
-        data?.result2?.acknowledged &&
-        setTimeout(() => {
-          refetch();
-        }, 2000);
+      refetch().then(() => setCanSetProject(true));
     }
   };
 
