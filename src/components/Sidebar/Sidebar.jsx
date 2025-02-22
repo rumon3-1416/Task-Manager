@@ -17,7 +17,7 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const { projectsTitles, refetchTitles, loadingTitles, isRefetching } =
+  const { projectsTitles, refetchTitles, loadingTitles, refetchingTitles } =
     useProject();
 
   // Navigate to Correct Existing Project
@@ -37,7 +37,7 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
         !isExists && navigate(`/${firstProjectId}`);
       }
     }
-  }, [loadingTitles, isRefetching]);
+  }, [loadingTitles, refetchingTitles]);
 
   // Handle sidebar Collapse
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DragDropContext } from '@hello-pangea/dnd';
 
@@ -8,9 +8,15 @@ import useProject from '../../Hooks/useProject';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const Home = () => {
+  const [localProject, setLocalProject] = useState({});
+
   const { pathname } = useLocation();
-  const { project, refetch } = useProject(pathname);
+  const { project, refetch, isRefetching, isFetched } = useProject(pathname);
   const axiosSecure = useAxiosSecure();
+  useEffect(() => {
+    // console.log(isRefetching);
+    isFetched && setLocalProject(project);
+  }, [project, isFetched]);
 
   const onDragEnd = async result => {
     const { source, destination } = result;
@@ -53,6 +59,22 @@ const Home = () => {
       );
       reorderedTasks.splice(destOrder - 1, 0, droppedTask);
 
+      // Update UI
+      const updatedProject = {
+        ...localProject,
+        task_categories: [
+          ...localProject.task_categories.map(cat => {
+            if (cat.category === sourceCat) {
+              return { ...cat, tasks: reorderedTasks };
+            } else {
+              return cat;
+            }
+          }),
+        ],
+      };
+      setLocalProject(updatedProject);
+
+      // Update in backend
       const { data } = await axiosSecure.patch(
         `/task_same_reorder${pathname}`,
         reorderedTasks
@@ -90,6 +112,24 @@ const Home = () => {
       );
       orderIncDestTasks.splice(destOrder - 1, 0, droppedTask);
 
+      // Update UI
+      const updatedProject = {
+        ...localProject,
+        task_categories: [
+          ...localProject.task_categories.map(cat => {
+            if (cat.category === sourceCat) {
+              return { ...cat, tasks: orderDecSourceTasks };
+            } else if (cat.category === destCat) {
+              return { ...cat, tasks: orderIncDestTasks };
+            } else {
+              return cat;
+            }
+          }),
+        ],
+      };
+      setLocalProject(updatedProject);
+
+      // Update in Backend
       const { data } = await axiosSecure.patch(`/task_cat_reorder${pathname}`, {
         source: { category: sourceCat, tasks: orderDecSourceTasks },
         destination: { category: destCat, tasks: orderIncDestTasks },
@@ -100,12 +140,12 @@ const Home = () => {
 
   return (
     <div className="w-full h-full p-4 overflow-y-auto">
-      <ProjectBar project={project} />
+      <ProjectBar project={localProject} />
 
       {/* Task Cards */}
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {project?.task_categories?.map((category, i) => (
+          {localProject?.task_categories?.map((category, i) => (
             <TaskCard category={category} key={i} />
           ))}
         </div>

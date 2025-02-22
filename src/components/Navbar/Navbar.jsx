@@ -3,25 +3,11 @@ import { HiBars3BottomLeft } from 'react-icons/hi2';
 import { useAuthContext } from '../../Hooks/useAuthContext';
 
 const Navbar = ({ navRef, collapse, setCollapse }) => {
-  const { darkTheme, user } = useAuthContext();
-
-  // useEffect(() => {
-  //   document.body.style.backgroundColor = darkTheme ? '#303030' : '#f7f7f7';
-  //   window.document.documentElement.classList.add(
-  //     darkTheme ? 'bg-dark3' : 'bg-[#f7f7f7]'
-  //   );
-  //   window.document.documentElement.classList.remove(
-  //     darkTheme ? 'bg-[#f7f7f7]' : 'bg-dark3'
-  //   );
-  // }, [darkTheme]);
+  const { user } = useAuthContext();
 
   return (
     <div className="w-full h-10 fixed top-0 inset-x-0 z-20">
-      <div
-        className={`w-full px-2 backdrop-blur-md shadow-lg ${
-          darkTheme ? 'bg-[#212527f0]' : 'bg-teal'
-        }`}
-      >
+      <div className={`w-full px-2 backdrop-blur-md shadow-lg bg-teal`}>
         <nav
           className={`h-10 flex justify-between items-center gap-2 relative`}
         >
@@ -37,13 +23,18 @@ const Navbar = ({ navRef, collapse, setCollapse }) => {
             <h2 className="poppins-font text-white font-semibold">Taskly</h2>
           </div>
 
-          <div className="me-2 rounded-full border border-white">
-            <img
-              className="w-7 h-7 aspect-square object-cover p-0.5 rounded-full"
-              src={user?.photoURL}
-              referrerPolicy="no-referrer"
-              alt=""
-            />
+          <div className="flex items-center gap-2">
+            <p className="text-gray-100 text-sm font-medium text-nowrap overflow-hidden">
+              {user.displayName}
+            </p>
+            <div className="me-2 p-0.5 rounded-full border border-white">
+              <img
+                className="w-7 h-7 aspect-square object-cover rounded-full"
+                src={user?.photoURL}
+                referrerPolicy="no-referrer"
+                alt=""
+              />
+            </div>
           </div>
         </nav>
       </div>

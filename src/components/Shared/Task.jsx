@@ -59,9 +59,9 @@ const Task = ({ task, index }) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="bg-white px-2 py-1 mt-1 border-[1.5px] border-gray-300 rounded-md flex justify-between items-center relative"
+          className="bg-white px-2 py-1 mt-1 border-[1.5px] border-gray-300 rounded-md flex justify-between items-center gap-2 relative"
         >
-          <p>{task.title}</p>
+          <p className="text-nowrap overflow-hidden">{task.title}</p>
 
           <button
             onClick={() => setShowUpdateTask(true)}

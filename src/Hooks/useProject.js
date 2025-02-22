@@ -8,7 +8,7 @@ const useProject = pathname => {
     data: projectsTitles = [],
     refetch: refetchTitles,
     isLoading: loadingTitles,
-    isRefetching,
+    isRefetching: refetchingTitles,
   } = useQuery({
     queryKey: ['projects_titles'],
     queryFn: async () => {
@@ -17,7 +17,12 @@ const useProject = pathname => {
     },
   });
 
-  const { data: project = {}, refetch } = useQuery({
+  const {
+    data: project = {},
+    refetch,
+    isRefetching,
+    isFetched,
+  } = useQuery({
     queryKey: ['project', pathname],
     queryFn: async () => {
       if (pathname.slice(1)) {
@@ -32,10 +37,12 @@ const useProject = pathname => {
   return {
     project,
     refetch,
+    isFetched,
+    isRefetching,
     projectsTitles,
     refetchTitles,
+    refetchingTitles,
     loadingTitles,
-    isRefetching,
   };
 };
 
