@@ -30,8 +30,8 @@ const TaskCard = ({ category }) => {
 
           {/* body Tasks */}
           <div>
-            {category.tasks.map((task, i) => (
-              <Task task={task} key={task.time} index={i} />
+            {category.tasks.map(task => (
+              <Task task={task} key={task.time} index={task.order} />
             ))}
             {provided.placeholder}
           </div>

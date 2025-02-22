@@ -57,6 +57,7 @@ export const ContextValue = () => {
                 email: currentUser.email,
                 displayName: currentUser.displayName,
                 photoURL: currentUser.photoURL,
+                userId: currentUser.providerData[0].uid,
               })
               .then(() => {
                 setLoading(false);

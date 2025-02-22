@@ -22,17 +22,19 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
 
   // Navigate to Correct Existing Project
   useEffect(() => {
+    const firstProjectId = projectsTitles[0]?._id;
+
     if (!loadingTitles) {
-      if (projectsTitles[0]?._id && pathname === '/') {
-        navigate(`/${projectsTitles[0]._id}`);
-      } else if (!projectsTitles[0]?._id) {
+      if (firstProjectId && pathname === '/') {
+        navigate(`/${firstProjectId}`);
+      } else if (!firstProjectId) {
         navigate('/');
-      } else if (projectsTitles[0]?._id && !(pathname === '/')) {
+      } else if (firstProjectId && !(pathname === '/')) {
         let isExists = false;
         projectsTitles.find(
           pt => pt._id === pathname.slice(1) && (isExists = true)
         );
-        !isExists && navigate(`/${projectsTitles[0]._id}`);
+        !isExists && navigate(`/${firstProjectId}`);
       }
     }
   }, [loadingTitles, isRefetching]);

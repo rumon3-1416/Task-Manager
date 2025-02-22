@@ -12,10 +12,46 @@ const Home = () => {
 
   const onDragEnd = result => {
     const { source, destination } = result;
-    if (!destination) return;
 
-    if (source.droppableId === destination.droppableId) {
-      console.log(source.droppableId, source.index, destination.index);
+    if (!destination) return;
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+
+    const sourceCat = source.droppableId;
+    const destCat = destination.droppableId;
+    const sourceOrder = source.index;
+    const destOrder = destination.index;
+
+    if (sourceCat === destCat) {
+      const tasks = project.task_categories.find(
+        tc => tc.category === sourceCat
+      ).tasks;
+
+      // Update Dropped Task
+      const droppedTask = {
+        ...tasks.find(task => task.order === sourceOrder),
+        order: destOrder,
+      };
+
+      // Filter remaining tasks
+      const filteredTasks = tasks.filter(task => task.order !== sourceOrder);
+
+      // Increase bottom tasks order
+      const orderIncTasks = filteredTasks.map(task =>
+        task.order > sourceOrder ? { ...task, order: task.order - 1 } : task
+      );
+
+      // Reorder tasks
+      const reorderedTasks = orderIncTasks.map(task =>
+        task.order >= destOrder ? { ...task, order: task.order + 1 } : task
+      );
+      reorderedTasks.splice(destOrder - 1, 0, droppedTask);
+
+      console.log(reorderedTasks);
     } else {
       console.log(
         source.droppableId,
