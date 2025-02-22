@@ -5,12 +5,14 @@ import { DragDropContext } from '@hello-pangea/dnd';
 import TaskCard from '../../components/Shared/TaskCard';
 import ProjectBar from './ProjectBar';
 import useProject from '../../Hooks/useProject';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const Home = () => {
   const { pathname } = useLocation();
-  const { project } = useProject(pathname);
+  const { project, refetch } = useProject(pathname);
+  const axiosSecure = useAxiosSecure();
 
-  const onDragEnd = result => {
+  const onDragEnd = async result => {
     const { source, destination } = result;
 
     if (!destination) return;
@@ -40,25 +42,59 @@ const Home = () => {
       // Filter remaining tasks
       const filteredTasks = tasks.filter(task => task.order !== sourceOrder);
 
-      // Increase bottom tasks order
-      const orderIncTasks = filteredTasks.map(task =>
+      // Decrease bottom tasks order
+      const orderDecTasks = filteredTasks.map(task =>
         task.order > sourceOrder ? { ...task, order: task.order - 1 } : task
       );
 
       // Reorder tasks
-      const reorderedTasks = orderIncTasks.map(task =>
+      const reorderedTasks = orderDecTasks.map(task =>
         task.order >= destOrder ? { ...task, order: task.order + 1 } : task
       );
       reorderedTasks.splice(destOrder - 1, 0, droppedTask);
 
-      console.log(reorderedTasks);
-    } else {
-      console.log(
-        source.droppableId,
-        source.index,
-        destination.droppableId,
-        destination.index
+      const { data } = await axiosSecure.patch(
+        `/task_same_reorder${pathname}`,
+        reorderedTasks
       );
+      data?.acknowledged && refetch();
+    } else {
+      // Source Category Tasks
+      const sourceTasks = project.task_categories.find(
+        tc => tc.category === sourceCat
+      ).tasks;
+      // Destination Category Tasks
+      const destTasks = project.task_categories.find(
+        tc => tc.category === destCat
+      ).tasks;
+
+      // Update Dropped Task
+      const droppedTask = {
+        ...sourceTasks.find(task => task.order === sourceOrder),
+        order: destOrder === 0 ? 1 : destOrder,
+        category: destCat,
+      };
+
+      // Filter Source tasks
+      const filteredSourceTasks = sourceTasks.filter(
+        task => task.order !== sourceOrder
+      );
+      // Decrease bottom Source tasks order
+      const orderDecSourceTasks = filteredSourceTasks.map(task =>
+        task.order > sourceOrder ? { ...task, order: task.order - 1 } : task
+      );
+
+      // Increase bottom Destination tasks order
+      const orderIncDestTasks = destTasks.map(task =>
+        task.order >= destOrder ? { ...task, order: task.order + 1 } : task
+      );
+      orderIncDestTasks.splice(destOrder - 1, 0, droppedTask);
+
+      const { data } = await axiosSecure.patch(`/task_cat_reorder${pathname}`, {
+        source: { category: sourceCat, tasks: orderDecSourceTasks },
+        destination: { category: destCat, tasks: orderIncDestTasks },
+      });
+      data?.result1?.acknowledged && data?.result2?.acknowledged && refetch();
     }
   };
 

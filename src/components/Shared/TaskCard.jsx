@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Droppable } from '@hello-pangea/dnd';
 import AddTask from './AddTask';
 import Task from './Task';
 
 const TaskCard = ({ category }) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
+
+  const orderTasks = tasks => {
+    const ordered = [];
+    tasks.map(task => {
+      ordered.splice(task.order - 1, 0, task);
+    });
+    return ordered;
+  };
 
   return (
     <Droppable droppableId={category.category}>
@@ -30,7 +38,7 @@ const TaskCard = ({ category }) => {
 
           {/* body Tasks */}
           <div>
-            {category.tasks.map(task => (
+            {orderTasks(category.tasks).map(task => (
               <Task task={task} key={task.time} index={task.order} />
             ))}
             {provided.placeholder}
