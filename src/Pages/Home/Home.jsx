@@ -11,12 +11,15 @@ const Home = () => {
   const [localProject, setLocalProject] = useState({});
 
   const { pathname } = useLocation();
-  const { project, refetch, isRefetching, isFetched } = useProject(pathname);
+  const { project, refetch, isFetched, isRefetching } = useProject(pathname);
   const axiosSecure = useAxiosSecure();
+
   useEffect(() => {
-    // console.log(isRefetching);
-    isFetched && setLocalProject(project);
-  }, [project, isFetched]);
+    if (isFetched && !isRefetching) {
+      setLocalProject(project);
+      console.log('hi');
+    }
+  }, [project, isFetched, isRefetching]);
 
   const onDragEnd = async result => {
     const { source, destination } = result;
@@ -134,7 +137,11 @@ const Home = () => {
         source: { category: sourceCat, tasks: orderDecSourceTasks },
         destination: { category: destCat, tasks: orderIncDestTasks },
       });
-      data?.result1?.acknowledged && data?.result2?.acknowledged && refetch();
+      data?.result1?.acknowledged &&
+        data?.result2?.acknowledged &&
+        setTimeout(() => {
+          refetch();
+        }, 2000);
     }
   };
 

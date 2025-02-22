@@ -20,6 +20,7 @@ const useProject = pathname => {
   const {
     data: project = {},
     refetch,
+    isFetching,
     isRefetching,
     isFetched,
   } = useQuery({
@@ -38,6 +39,7 @@ const useProject = pathname => {
     project,
     refetch,
     isFetched,
+    isFetching,
     isRefetching,
     projectsTitles,
     refetchTitles,
