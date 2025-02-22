@@ -21,6 +21,7 @@ const Home = () => {
     }
   }, [project, isFetched, isRefetching, canSetProject]);
 
+  // Handle Dragging
   const onDragEnd = async result => {
     const { source, destination } = result;
 
@@ -139,6 +140,10 @@ const Home = () => {
       refetch().then(() => setCanSetProject(true));
     }
   };
+
+  useEffect(() => {
+    document.title = `Taskly | ${project?.title || ''}`;
+  }, [project]);
 
   return (
     <div className="w-full h-full p-4 overflow-y-auto">

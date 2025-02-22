@@ -21,7 +21,7 @@ const TaskCard = ({ category }) => {
           ref={provided.innerRef}
           {...provided.droppableProps}
           id={category.title}
-          className="bg-coralBg h-fit p-2 border-[1.5px] border-gray-300 rounded-md relative"
+          className="bg-coralBg h-fit p-2 border-[1.5px] border-gray-300 rounded-md shadow-md relative"
         >
           {/* Head */}
           <div className="flex justify-between items-center gap-2">

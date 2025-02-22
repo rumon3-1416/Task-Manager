@@ -88,7 +88,7 @@ const Sidebar = ({ navRef, collapse, setCollapse }) => {
         {/* Sidebar */}
         <div
           ref={divRef}
-          className={`sidebar h-full absolute md:static top-0 bottom-0 transition-all duration-300 ${
+          className={`sidebar h-full overflow-y-auto absolute md:static top-0 bottom-0 transition-all duration-300 ${
             collapse ? 'w-0 md:w-48 overflow-hidden' : 'w-48'
           } ${darkTheme ? 'bg-[#212527f0]' : 'bg-[#f6fffe]'}`}
         >
