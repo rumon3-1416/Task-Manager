@@ -103,7 +103,9 @@ const Task = ({ task, index }) => {
               </p>
               {/* Time */}
               <p className="font-medium">Timestamp</p>
-              <p className="mb-3">{`${new Date().toLocaleDateString()} - ${new Date().toLocaleDateString()}`}</p>
+              <p className="mb-3">{`${new Date(
+                task.time
+              ).toLocaleDateString()} - ${new Date().toLocaleDateString()}`}</p>
               {/* Description */}
               <label className="font-medium" htmlFor="description">
                 Description
